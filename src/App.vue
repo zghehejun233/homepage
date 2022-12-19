@@ -1,7 +1,38 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
 import HelloWorld from "./components/HelloWorld.vue";
-import { onMounted } from "vue";
+import { onMounted, onUpdated, reactive, ref } from "vue";
+import {
+  VApp,
+  VMain,
+  VAppBar,
+  VImg,
+  VContainer,
+  VFooter,
+} from "vuetify/components";
+import { useLayout } from "vuetify";
+const theme = ref("light");
+const Child = {
+  setup(props, ctx) {
+    const { getLayoutItem } = useLayout();
+
+    function print(key) {
+      alert(JSON.stringify(getLayoutItem(key), null, 2));
+    }
+
+    return () => ctx.slots.default({ print });
+  },
+};
+
+function onClick() {
+  theme.value = theme.value === "light" ? "dark" : "light";
+}
+const windowInfo = reactive({
+  width: window.outerWidth,
+  height: window.outerHeight,
+});
+
+const alignments = ["start", "center", "end"];
 
 function parallelScroll() {
   document.addEventListener("scroll", function () {
@@ -75,34 +106,52 @@ function background(bg: HTMLCanvasElement) {
 onMounted(() => {
   background(document.getElementsByTagName("canvas")[0] as HTMLCanvasElement);
   parallelScroll();
+  // stickHeader();
 });
 </script>
 
 <template>
-  <header>
-    <canvas class="bg" ref="bg"></canvas>
-    <img
-      alt="Vue logo"
-      class="logo"
-      src="@/assets/logo.svg"
-      width="125"
-      height="125"
-    />
+  <v-app>
+    <v-app-bar app color="primary"> </v-app-bar>
+    <v-main>
+      <RouterView />
+      <canvas class="bg" ref="bg"></canvas>
+      <v-container
+        >xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</v-container
+      >
+      <v-container
+        >xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</v-container
+      >
+      <v-row>
+        <v-col cols="6">
+          <v-card class="mx-auto" max-width="344">
+            <v-img
+              src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+              height="194"
+            ></v-img>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+            <v-card-title>Card Title</v-card-title>
 
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
+            <v-card-subtitle>Card Subtitle</v-card-subtitle>
 
-  <RouterView />
-  <div style="height: 200rem">
-    Hi, I'm a long div. Scroll me to see the background effect.
-  </div>
+            <v-card-text>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat.
+            </v-card-text>
+
+            <v-card-actions>
+              <v-btn text>Cancel</v-btn>
+
+              <v-btn text>Ok</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+        <v-col cols="6">xxxxx</v-col>
+      </v-row>
+    </v-main>
+  </v-app>
 </template>
 
 <style scoped>
@@ -114,75 +163,5 @@ onMounted(() => {
   width: 100%;
   height: 100%;
   z-index: -1;
-}
-
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-.content {
-  background-attachment: fixed;
-  width: 100%;
-  height: 200rem;
-  top: 0;
-  left: 0;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
 }
 </style>
