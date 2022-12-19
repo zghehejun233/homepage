@@ -150,6 +150,12 @@ onMounted(() => {
         </v-col>
         <v-col cols="6">xxxxx</v-col>
       </v-row>
+      <v-col class="text-center" cols="12">
+        <div class="footer">
+          2021 - {{ new Date().getFullYear() }} | Powered by
+          <strong>Vuetify Vue</strong><br />鲁ICP备2022030000号
+        </div>
+      </v-col>
     </v-main>
   </v-app>
 </template>
@@ -163,5 +169,9 @@ onMounted(() => {
   width: 100%;
   height: 100%;
   z-index: -1;
+}
+
+.footer {
+  padding: 30px 0;
 }
 </style>
