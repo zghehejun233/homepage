@@ -3,6 +3,14 @@ import { RouterLink, RouterView } from "vue-router";
 import HelloWorld from "./components/HelloWorld.vue";
 import { onMounted } from "vue";
 
+function parallelScroll() {
+  document.addEventListener("scroll", function () {
+    let scroll = window.scrollY;
+    let bg = document.getElementsByTagName("canvas")[0] as HTMLCanvasElement;
+    bg.style.transform = "translateY(" + scroll * 0.01 + "px)";
+  });
+}
+
 function background(bg: HTMLCanvasElement) {
   let ctx = bg!.getContext("2d")!;
   document.addEventListener("touchmove", function (e) {
@@ -66,6 +74,7 @@ function background(bg: HTMLCanvasElement) {
 
 onMounted(() => {
   background(document.getElementsByTagName("canvas")[0] as HTMLCanvasElement);
+  parallelScroll();
 });
 </script>
 
@@ -91,11 +100,15 @@ onMounted(() => {
   </header>
 
   <RouterView />
+  <div style="height: 200rem">
+    Hi, I'm a long div. Scroll me to see the background effect.
+  </div>
 </template>
 
 <style scoped>
 .bg {
   position: fixed;
+  background-attachment: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -111,6 +124,14 @@ header {
 .logo {
   display: block;
   margin: 0 auto 2rem;
+}
+
+.content {
+  background-attachment: fixed;
+  width: 100%;
+  height: 200rem;
+  top: 0;
+  left: 0;
 }
 
 nav {
