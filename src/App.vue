@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from "vue-router";
+import { RouterView } from "vue-router";
 import HelloWorld from "./components/HelloWorld.vue";
-import { onMounted, ref } from "vue";
+import { onMounted } from "vue";
 import { VApp, VMain, VAppBar, VImg } from "vuetify/components";
 import { VContainer, VRow, VCol } from "vuetify/components";
 function parallelScroll() {
@@ -101,61 +101,9 @@ onMounted(() => {
   <v-app>
     <v-app-bar app color="primary"> </v-app-bar>
     <v-main id="cao">
+      <RouterView></RouterView>
       <canvas class="bg" ref="bg"></canvas>
-      <RouterView />
-
-      <v-row>
-        <v-col cols="6">
-          <v-card class="mx-auto" max-width="344">
-            <v-img
-              src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-              height="194"
-            ></v-img>
-
-            <v-card-title>Card Title</v-card-title>
-
-            <v-card-subtitle>Card Subtitle</v-card-subtitle>
-
-            <v-card-text>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </v-card-text>
-
-            <v-card-actions>
-              <v-btn text>Cancel</v-btn>
-
-              <v-btn text>Ok</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-col>
-        <v-col cols="6"
-          ><v-card class="mx-auto" max-width="344">
-            <v-img
-              src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-              height="194"
-            ></v-img>
-
-            <v-card-title>Card Title</v-card-title>
-
-            <v-card-subtitle>Card Subtitle</v-card-subtitle>
-
-            <v-card-text>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </v-card-text>
-
-            <v-card-actions>
-              <v-btn text>Cancel</v-btn>
-
-              <v-btn text>Ok</v-btn>
-            </v-card-actions>
-          </v-card></v-col
-        >
-      </v-row>
+      <!--  -->
       <v-col class="text-center" cols="12">
         <div class="footer">
           2021 - {{ new Date().getFullYear() }} | Powered by
