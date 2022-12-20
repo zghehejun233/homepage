@@ -1,39 +1,9 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
 import HelloWorld from "./components/HelloWorld.vue";
-import { onMounted, onUpdated, reactive, ref } from "vue";
-import {
-  VApp,
-  VMain,
-  VAppBar,
-  VImg,
-  VContainer,
-  VFooter,
-} from "vuetify/components";
-import { useLayout } from "vuetify";
-const theme = ref("light");
-const Child = {
-  setup(props, ctx) {
-    const { getLayoutItem } = useLayout();
-
-    function print(key) {
-      alert(JSON.stringify(getLayoutItem(key), null, 2));
-    }
-
-    return () => ctx.slots.default({ print });
-  },
-};
-
-function onClick() {
-  theme.value = theme.value === "light" ? "dark" : "light";
-}
-const windowInfo = reactive({
-  width: window.outerWidth,
-  height: window.outerHeight,
-});
-
-const alignments = ["start", "center", "end"];
-
+import { onMounted, ref } from "vue";
+import { VApp, VMain, VAppBar, VImg } from "vuetify/components";
+import { VContainer, VRow, VCol } from "vuetify/components";
 function parallelScroll() {
   document.addEventListener("scroll", function () {
     let scroll = window.scrollY;
@@ -103,25 +73,37 @@ function background(bg: HTMLCanvasElement) {
   i();
 }
 
+function resizeMainWindow() {
+  resizeWindow();
+  window.addEventListener("resize", function () {
+    resizeWindow();
+  });
+}
+
+function resizeWindow() {
+  const cao = document.getElementById("cao");
+  const width = window.innerWidth;
+  if (width < 1440 - 160) {
+    cao!.style.width = width - 64 + "px";
+  } else {
+    cao!.style.width = width - 224 + "px";
+  }
+}
+
 onMounted(() => {
   background(document.getElementsByTagName("canvas")[0] as HTMLCanvasElement);
   parallelScroll();
-  // stickHeader();
+  resizeMainWindow();
 });
 </script>
 
 <template>
   <v-app>
     <v-app-bar app color="primary"> </v-app-bar>
-    <v-main>
-      <RouterView />
+    <v-main id="cao">
       <canvas class="bg" ref="bg"></canvas>
-      <v-container
-        >xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</v-container
-      >
-      <v-container
-        >xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</v-container
-      >
+      <RouterView />
+
       <v-row>
         <v-col cols="6">
           <v-card class="mx-auto" max-width="344">
@@ -148,7 +130,31 @@ onMounted(() => {
             </v-card-actions>
           </v-card>
         </v-col>
-        <v-col cols="6">xxxxx</v-col>
+        <v-col cols="6"
+          ><v-card class="mx-auto" max-width="344">
+            <v-img
+              src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+              height="194"
+            ></v-img>
+
+            <v-card-title>Card Title</v-card-title>
+
+            <v-card-subtitle>Card Subtitle</v-card-subtitle>
+
+            <v-card-text>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat.
+            </v-card-text>
+
+            <v-card-actions>
+              <v-btn text>Cancel</v-btn>
+
+              <v-btn text>Ok</v-btn>
+            </v-card-actions>
+          </v-card></v-col
+        >
       </v-row>
       <v-col class="text-center" cols="12">
         <div class="footer">
