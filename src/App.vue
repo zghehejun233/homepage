@@ -72,58 +72,62 @@ function background(bg: HTMLCanvasElement) {
   i();
 }
 
-function resizeMainWindow() {
-  resizeWindow();
-  window.addEventListener("resize", function () {
-    resizeWindow();
-  });
-}
+const init = () => {
+  console.log("init");
+  const bg = document.createElement("canvas");
+  bg.id = "bg";
+  bg.className = "bg";
+  document.body.appendChild(bg);
+};
 
-function resizeWindow() {
-  const cao = document.getElementById("cao");
-  const width = window.innerWidth;
-  if (width < 1440 - 160) {
-    cao!.style.width = width - 64 + "px";
-  } else {
-    cao!.style.width = width - 224 + "px";
-  }
-}
+const trying = () => {
+  console.log("try");
+  let bg = document.getElementById("test") as HTMLElement;
+  background(bg as HTMLCanvasElement);
+};
 
 onMounted(() => {
   background(document.getElementsByTagName("canvas")[0] as HTMLCanvasElement);
   parallelScroll();
-  resizeMainWindow();
+  // init();
+  // trying();
 });
 </script>
 
 <template>
   <v-app id="cao">
     <v-app-bar app color="primary"> </v-app-bar>
-    <v-main>
-      <RouterView></RouterView>
-      <canvas class="bg" ref="bg"></canvas>
-      <v-col class="text-center" cols="12">
-        <div class="footer">
-          2021 - {{ new Date().getFullYear() }} | Powered by
-          <strong>Vuetify Vue Vite</strong><br />鲁ICP备2022030000号
-        </div>
-      </v-col>
+    <v-main class="main">
+      <v-container fluid>
+        <RouterView></RouterView>
+        <v-col class="text-center" cols="12">
+          <div class="footer">
+            2021 - {{ new Date().getFullYear() }} | Powered by
+            <strong>Vuetify Vue Vite</strong><br />鲁ICP备2022030000号
+          </div>
+        </v-col>
+      </v-container>
     </v-main>
   </v-app>
+  <canvas id="test" class="bg"></canvas>
 </template>
 
 <style scoped>
 .bg {
   position: fixed;
-  background-attachment: fixed;
+  display: block;
+  /* background-attachment: fixed; */
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1;
+  z-index: -999;
 }
 
 .footer {
   padding: 30px 0;
+}
+.main {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 </style>
