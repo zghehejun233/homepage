@@ -2,12 +2,16 @@
 import { RouterView } from "vue-router";
 import { onMounted } from "vue";
 import { VApp, VMain, VAppBar } from "vuetify/components";
-import { VCol } from "vuetify/components";
+import { VCol, VTabs, VTab, VIcon, VTooltip } from "vuetify/components";
+
+// 背景滚动速度
+const parallelRaatio = 0.02;
+
 function parallelScroll() {
   document.addEventListener("scroll", function () {
     let scroll = window.scrollY;
     let bg = document.getElementsByTagName("canvas")[0] as HTMLCanvasElement;
-    bg.style.transform = "translateY(" + scroll * 0.01 + "px)";
+    bg.style.transform = "translateY(" + scroll * parallelRaatio + "px)";
   });
 }
 
@@ -79,8 +83,21 @@ onMounted(() => {
 </script>
 
 <template>
-  <v-app>
-    <v-app-bar app color="primary"> </v-app-bar>
+  <canvas class="bg"></canvas>
+  <v-app id="main">
+    <v-app-bar :elevation="2" scroll-threshold="200" rounded>
+      <template v-slot:append>
+        <v-tabs>
+          <v-tooltip bottom>
+            <template v-slot:activator>
+              <v-tab to="/"><v-icon size="x-large">mdi-home</v-icon></v-tab>
+            </template>
+            <span>xxx</span>
+          </v-tooltip>
+          <v-tab to="/about"><v-icon size="x-large">mdi-book</v-icon></v-tab>
+        </v-tabs>
+      </template>
+    </v-app-bar>
     <v-main>
       <v-container fluid>
         <RouterView></RouterView>
@@ -93,19 +110,22 @@ onMounted(() => {
       </v-container>
     </v-main>
   </v-app>
-  <canvas id="test" class="bg"></canvas>
 </template>
 
 <style scoped>
 .bg {
   position: fixed;
-  display: block;
   /* background-attachment: fixed; */
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   z-index: -999;
+}
+
+#main {
+  /* 使根组件透明，显示背景 */
+  background: rgba(255, 255, 255, 0);
 }
 
 .footer {
