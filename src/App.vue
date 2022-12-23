@@ -95,7 +95,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <v-app id="cao">
+  <v-app id="resize">
     <v-app-bar app color="primary"> </v-app-bar>
     <v-main class="main">
       <v-container fluid>
