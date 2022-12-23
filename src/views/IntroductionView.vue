@@ -5,34 +5,19 @@ import axios from "axios";
 import QuoteBanner from "@/components/QuoteBanner.vue";
 import type { App } from "vue";
 
+import { getQuote } from "@/api/quote";
+
 let quote = reactive({
   text: "",
   from: "",
 });
 
-function dailyQuote() {
-  axios
-    .get("https://v1.hitokoto.cn", {
-      params: {
-        c: "a",
-        max_length: 26,
-        encode: "json",
-      },
-    })
-    .then((res) => {
-      if (res.data.hitokoto.length < 15) {
-        let quote = document.getElementsByTagName(
-          "h1"
-        )[0] as HTMLHeadingElement;
-        quote.style.animation =
-          "typing 1.5s steps(40, end), blink-caret 0.75s step-end infinite;";
-      }
-      quote.text = "「" + res.data.hitokoto + "」";
-      quote.from = "——《" + res.data.from + "》 " + (res.data.from_who ?? "");
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+function buildQuote() {
+  getQuote().then((res) => {
+    console.log("In then");
+    console.log(res);
+    quote = res;
+  });
 }
 
 let bing = reactive({
@@ -104,7 +89,7 @@ function printBanner() {
 onMounted(() => {
   printBanner();
   bingImage();
-  dailyQuote();
+  buildQuote();
   onQuoteHover();
 });
 </script>

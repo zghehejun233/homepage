@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
-import HelloWorld from "./components/HelloWorld.vue";
 import { onMounted } from "vue";
-import { VApp, VMain, VAppBar, VImg } from "vuetify/components";
-import { VContainer, VRow, VCol } from "vuetify/components";
+import { VApp, VMain, VAppBar } from "vuetify/components";
+import { VCol } from "vuetify/components";
 function parallelScroll() {
   document.addEventListener("scroll", function () {
     let scroll = window.scrollY;
@@ -98,16 +97,15 @@ onMounted(() => {
 </script>
 
 <template>
-  <v-app>
+  <v-app id="cao">
     <v-app-bar app color="primary"> </v-app-bar>
-    <v-main id="cao">
+    <v-main>
       <RouterView></RouterView>
       <canvas class="bg" ref="bg"></canvas>
-      <!--  -->
       <v-col class="text-center" cols="12">
         <div class="footer">
           2021 - {{ new Date().getFullYear() }} | Powered by
-          <strong>Vuetify Vue</strong><br />鲁ICP备2022030000号
+          <strong>Vuetify Vue Vite</strong><br />鲁ICP备2022030000号
         </div>
       </v-col>
     </v-main>
