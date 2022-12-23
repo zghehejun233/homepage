@@ -1,14 +1,9 @@
 <script setup lang="ts">
-import {
-  VContainer,
-  VImg,
-  VCol,
-  VRow,
-  VSpacer,
-  VLazy,
-} from "vuetify/components";
-import { onMounted, ref, reactive } from "vue";
+import { VContainer, VCol, VRow } from "vuetify/components";
+import { onMounted, reactive, createApp } from "vue";
 import axios from "axios";
+import QuoteBanner from "@/components/QuoteBanner.vue";
+import type { App } from "vue";
 
 let quote = reactive({
   text: "",
@@ -44,7 +39,6 @@ let bing = reactive({
   url: "",
 });
 
-// bing image api
 function bingImage() {
   axios
     .get(" https://bing.biturl.top", {
@@ -65,33 +59,59 @@ function bingImage() {
 }
 
 function onQuoteHover() {
-  let quote = document.getElementsByClassName("quote")[0] as HTMLDivElement;
-  console.log(quote);
-
-  quote.addEventListener("onHover", () => {
-    console.log("hover");
-  });
-}
-function test() {
-  document.addEventListener("resize", () => {
-    console.log("resize");
-    if (window.innerWidth < 600) {
-      console.log("小于600");
-
-      quote.text = quote.text.slice(0, 10) + "...";
+  let quoteNode = document.getElementsByClassName("quote")[0] as HTMLDivElement;
+  let xxx: App<Element>;
+  let flag = false;
+  quoteNode.addEventListener("mouseenter", () => {
+    if (!flag) {
+      xxx = createApp(QuoteBanner, {
+        quote: {
+          text: "「" + quote.text + "」",
+          from: "——《" + quote.from + "》",
+        },
+      });
+      xxx.mount("#xxx");
+      flag = true;
+    } else {
+      xxx!.unmount();
+      flag = false;
     }
   });
 }
+
+function printBanner() {
+  console.log(
+    `
+    ███████╗██████╗ ██╗   ██╗       ██████╗ ███╗   ██╗██╗     ██╗███╗   ██╗███████╗
+    ██╔════╝██╔══██╗██║   ██║      ██╔═══██╗████╗  ██║██║     ██║████╗  ██║██╔════╝
+    ███████╗██║  ██║██║   ██║█████╗██║   ██║██╔██╗ ██║██║     ██║██╔██╗ ██║█████╗
+    ╚════██║██║  ██║██║   ██║╚════╝██║   ██║██║╚██╗██║██║     ██║██║╚██╗██║██╔══╝
+    ███████║██████╔╝╚██████╔╝      ╚██████╔╝██║ ╚████║███████╗██║██║ ╚████║███████╗
+    ╚══════╝╚═════╝  ╚═════╝        ╚═════╝ ╚═╝  ╚═══╝╚══════╝╚═╝╚═╝  ╚═══╝╚══════╝
+    `,
+    "color: #000; background: #fff; padding:5px 0;"
+  );
+  console.log(
+    "%c 作者: 郭苏睿",
+    "color: #000; background: #fff; padding:5px 0;"
+  );
+  console.log(
+    "%c LICENSE: Anti 996",
+    "color: #000; background: #fff; padding:5px 0;"
+  );
+}
+
 onMounted(() => {
+  printBanner();
   bingImage();
   dailyQuote();
   onQuoteHover();
-  test();
 });
 </script>
 <template>
   <v-container class="introduction">
     <v-row>
+      <v-col cols="12"><div id="xxx"></div></v-col>
       <v-col cols="12">
         <v-parallax class="parallel" :src="bing.url" height="300px">
           <v-row align="center" justify="center">
