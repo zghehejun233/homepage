@@ -80,12 +80,15 @@ function resizeMainWindow() {
 }
 
 function resizeWindow() {
-  const cao = document.getElementById("cao");
-  const width = window.innerWidth;
-  if (width < 1440 - 160) {
-    cao!.style.width = width - 64 + "px";
-  } else {
-    cao!.style.width = width - 224 + "px";
+  const app = document.getElementById("app") as HTMLElement;
+  const cao = document.getElementById("resize") as HTMLElement;
+  if (cao) {
+    let width = app.clientWidth;
+    let windowWidth = window.innerWidth;
+    if (windowWidth - width > 32 * 2) {
+      width = 1216;
+    }
+    cao.style.width = width - 32 * 2 + "px";
   }
 }
 
@@ -97,7 +100,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <v-app id="cao">
+  <v-app id="resize">
     <v-app-bar app color="primary"> </v-app-bar>
     <v-main>
       <RouterView></RouterView>
