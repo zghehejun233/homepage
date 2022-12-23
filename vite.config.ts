@@ -7,7 +7,9 @@ import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    vue(),
+    vue({
+      template: { transformAssetUrls },
+    }),
     vuetify({
       autoImport: true,
       styles: {
@@ -15,9 +17,11 @@ export default defineConfig({
       },
     }),
   ],
+  define: {'process.env': {}},
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
-  },
+    extensions: [".js", ".ts", ".jsx", ".tsx", ".json", ".vue"],
+  }
 });
