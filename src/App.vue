@@ -11,7 +11,7 @@ function parallelScroll() {
   });
 }
 
-function background(bg: HTMLCanvasElement) {
+function drawRibbon(bg: HTMLCanvasElement) {
   let ctx = bg!.getContext("2d")!;
   document.addEventListener("touchmove", function (e) {
     e.preventDefault();
@@ -72,32 +72,16 @@ function background(bg: HTMLCanvasElement) {
   i();
 }
 
-const init = () => {
-  console.log("init");
-  const bg = document.createElement("canvas");
-  bg.id = "bg";
-  bg.className = "bg";
-  document.body.appendChild(bg);
-};
-
-const trying = () => {
-  console.log("try");
-  let bg = document.getElementById("test") as HTMLElement;
-  background(bg as HTMLCanvasElement);
-};
-
 onMounted(() => {
-  background(document.getElementsByTagName("canvas")[0] as HTMLCanvasElement);
+  drawRibbon(document.getElementsByTagName("canvas")[0] as HTMLCanvasElement);
   parallelScroll();
-  // init();
-  // trying();
 });
 </script>
 
 <template>
-  <v-app id="resize">
+  <v-app>
     <v-app-bar app color="primary"> </v-app-bar>
-    <v-main class="main">
+    <v-main>
       <v-container fluid>
         <RouterView></RouterView>
         <v-col class="text-center" cols="12">
@@ -126,8 +110,5 @@ onMounted(() => {
 
 .footer {
   padding: 30px 0;
-}
-.main {
-  background-color: rgba(255, 255, 255, 0.1);
 }
 </style>

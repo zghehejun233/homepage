@@ -1,70 +1,82 @@
 <script setup lang="ts">
 import { VContainer, VCol, VRow } from "vuetify/components";
-import { onMounted, reactive, createApp } from "vue";
-import axios from "axios";
-import QuoteBanner from "@/components/QuoteBanner.vue";
-import type { App } from "vue";
+import { onMounted, reactive } from "vue";
 
 import { getQuote } from "@/api/quote";
+import type { Quote } from "@/api/quote";
+import { getBing } from "@/api/bing";
 
-let quote = reactive({
+// 文本动画速度比例
+const textAnimationRatio: number = 3;
+
+let quote: Quote = reactive({
   text: "",
   from: "",
+  uuid: "",
 });
-
-function buildQuote() {
-  getQuote().then((res) => {
-    console.log("In then");
-    console.log(res);
-    quote = res;
-  });
-}
 
 let bing = reactive({
   url: "",
 });
 
-function bingImage() {
-  axios
-    .get(" https://bing.biturl.top", {
-      params: {
-        resolution: "1920",
-        format: "json",
-        mkt: "zh-CN",
-      },
-    })
-    .then((res) => {
-      bing.url = res.data.url;
-    })
-    .catch((err) => {
-      console.log(err);
-      bing.url =
-        "https://cn.bing.com/th?id=OHR.SnowyOwl_ZH-CN1193651608_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp";
-    });
-}
+const buildQuote = () => {
+  getQuote().then((res) => {
+    let textLength: number = res.text.length;
+    let textElement: HTMLElement = document.querySelector(
+      ".quote h1"
+    ) as HTMLElement;
+    const parentFontSize: number = Number(
+      window
+        .getComputedStyle(textElement.parentElement as HTMLElement)
+        .getPropertyValue("font-size")
+        .split("px")[0]
+    );
 
-function onQuoteHover() {
-  let quoteNode = document.getElementsByClassName("quote")[0] as HTMLDivElement;
-  let xxx: App<Element>;
-  let flag = false;
-  quoteNode.addEventListener("mouseenter", () => {
-    if (!flag) {
-      xxx = createApp(QuoteBanner, {
-        quote: {
-          text: "「" + quote.text + "」",
-          from: "——《" + quote.from + "》",
-        },
-      });
-      xxx.mount("#xxx");
-      flag = true;
-    } else {
-      xxx!.unmount();
-      flag = false;
-    }
+    // 调整文本长度
+    textElement.style.fontSize = res.text.length > 20 ? "1.5rem" : "2rem";
+    let textWidth: number =
+      Number(
+        window
+          .getComputedStyle(textElement)
+          .getPropertyValue("width")
+          .split("px")[0]
+      ) *
+      textLength *
+      parentFontSize;
+    resizeQuoteText(textWidth, textLength, res);
+
+    quote.from = `—《${res.from}》` + (res.who ? `，${res.who}` : "");
+    quote.uuid = res.uuid;
+
+    // 调整文本动画
+    let textAnimationDuration: number = (20 / textLength) * textAnimationRatio;
+    textElement.style.animationDuration = `${textAnimationDuration}s`;
+
+    // 监听窗口大小变化
+    window.addEventListener("resize", () =>
+      resizeQuoteText(textWidth, textLength, res)
+    );
   });
-}
+};
 
-function printBanner() {
+const resizeQuoteText = (textWidth: number, textLength: number, res: Quote) => {
+  let containerWidth = (document.querySelector(".quote") as HTMLElement)
+    .clientWidth;
+  if (textWidth - 32 * 2 > containerWidth) {
+    quote.text =
+      res.text.slice(0, containerWidth / (textWidth / textLength)) + "...";
+  } else {
+    quote.text = res.text;
+  }
+};
+
+const buildBingImage = () => {
+  getBing().then((res) => {
+    bing.url = res.url;
+  });
+};
+
+const printBanner = () => {
   console.log(
     `
     ███████╗██████╗ ██╗   ██╗       ██████╗ ███╗   ██╗██╗     ██╗███╗   ██╗███████╗
@@ -84,13 +96,12 @@ function printBanner() {
     "%c LICENSE: Anti 996",
     "color: #000; background: #fff; padding:5px 0;"
   );
-}
+};
 
 onMounted(() => {
   printBanner();
-  bingImage();
+  buildBingImage();
   buildQuote();
-  onQuoteHover();
 });
 </script>
 <template>
@@ -167,7 +178,7 @@ onMounted(() => {
     border-color: transparent;
   }
   50% {
-    border-color: orange;
+    border-color: rgb(177, 220, 255);
   }
 }
 
