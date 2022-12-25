@@ -71,8 +71,8 @@ function drawRibbon(bg: HTMLCanvasElement) {
     return t > height || t < 0 ? y(p) : t;
   }
 
-  document.onclick = i;
-  document.ontouchstart = i;
+  // document.onclick = i;
+  // document.ontouchstart = i;
   i();
 }
 
@@ -86,6 +86,12 @@ onMounted(() => {
   <canvas class="bg"></canvas>
   <v-app id="main">
     <v-app-bar :elevation="2" scroll-threshold="200" rounded>
+      <template v-slot:default>
+        <span>
+          <v-icon size="x-large">mdi-vuetify</v-icon>
+          <span class="ml-2">苏喂</span>
+        </span>
+      </template>
       <template v-slot:append>
         <v-tabs>
           <v-tooltip bottom>
@@ -99,20 +105,35 @@ onMounted(() => {
       </template>
     </v-app-bar>
     <v-main>
-      <v-container fluid>
-        <RouterView></RouterView>
-        <v-col class="text-center" cols="12">
-          <div class="footer">
-            2021 - {{ new Date().getFullYear() }} | Powered by
-            <strong>Vuetify Vue Vite</strong><br />鲁ICP备2022030000号
-          </div>
-        </v-col>
-      </v-container>
+      <RouterView>
+        <template v-slot="{ Component }">
+          <transition name="fade">
+            <component :is="Component" />
+          </transition>
+        </template>
+      </RouterView>
+      <v-col class="text-center" cols="12">
+        <div class="footer">
+          2021 - {{ new Date().getFullYear() }} | Powered by
+          <strong>Vuetify Vue Vite</strong><br />鲁ICP备2022030000号
+        </div>
+      </v-col>
     </v-main>
   </v-app>
 </template>
 
 <style scoped>
+/* 下面我们会解释这些 class 是做什么的 */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
 .bg {
   position: fixed;
   /* background-attachment: fixed; */

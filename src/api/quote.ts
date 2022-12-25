@@ -7,6 +7,8 @@ export interface Quote {
   uuid: string;
 }
 
+const category = ["a", "b", "c", "d", "e", "f", "h", "i", "j", "k"];
+
 export const getQuote = async (): Promise<Quote> => {
   let quote: Quote = {
     text: "Loading...",
@@ -17,7 +19,7 @@ export const getQuote = async (): Promise<Quote> => {
   await axios
     .get("https://v1.hitokoto.cn", {
       params: {
-        c: "a",
+        c: category[Math.floor(Math.random() * category.length)],
         max_length: 26,
         encode: "json",
       },
@@ -36,4 +38,3 @@ export const getQuote = async (): Promise<Quote> => {
 
   return quote;
 };
-

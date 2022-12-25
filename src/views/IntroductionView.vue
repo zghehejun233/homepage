@@ -16,7 +16,7 @@ let quote: Quote = reactive({
 });
 
 let bing = reactive({
-  url: "",
+  url: "https://www.bing.com/th?id=OHR.WhistlerVillage_ZH-CN3451305723_1920x1080.jpg",
 });
 
 const buildQuote = () => {
