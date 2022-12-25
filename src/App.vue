@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
-import { onMounted } from "vue";
+import { onMounted, reactive } from "vue";
 import { VApp, VMain, VAppBar } from "vuetify/components";
 import { VCol, VTabs, VTab, VIcon, VTooltip } from "vuetify/components";
+import { getIpInfo } from "@/api/userInfo";
+import type { IpInfo } from "@/api/userInfo";
 
 // 背景滚动速度
 const parallelRaatio = 0.02;
@@ -76,9 +78,27 @@ function drawRibbon(bg: HTMLCanvasElement) {
   i();
 }
 
+let welcomebar = reactive({
+  show: false,
+  text: "",
+});
+
+const ipSnakbar = () => {
+  getIpInfo().then((res: IpInfo) => {
+    console.log(res);
+    const { ip, country, region, city } = res;
+    console.log("你好，来自" + country + region + city + "的朋友！");
+    setTimeout(() => {
+      welcomebar.show = true;
+      welcomebar.text = "你好，来自" + country + region + city + "的朋友！";
+    }, 100);
+  });
+};
+
 onMounted(() => {
   drawRibbon(document.getElementsByTagName("canvas")[0] as HTMLCanvasElement);
   parallelScroll();
+  ipSnakbar();
 });
 </script>
 
@@ -118,6 +138,14 @@ onMounted(() => {
           <strong>Vuetify Vue Vite</strong><br />鲁ICP备2022030000号
         </div>
       </v-col>
+      <v-snackbar v-model="welcomebar.show" timeout="3000" color="success">
+        {{ welcomebar.text }}
+        <template v-slot:actions>
+          <v-btn color="white" variant="text" @click="welcomebar.show = false">
+            关闭
+          </v-btn>
+        </template>
+      </v-snackbar>
     </v-main>
   </v-app>
 </template>

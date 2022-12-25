@@ -38,7 +38,6 @@ const info = reactive({
   ],
 });
 
-
 const goUrl = (url: string) => {
   window.open(url, "_blank");
 };
