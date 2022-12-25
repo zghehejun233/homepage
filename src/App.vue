@@ -2,7 +2,7 @@
 import { RouterView } from "vue-router";
 import { onMounted, reactive } from "vue";
 import { VApp, VMain, VAppBar } from "vuetify/components";
-import { VCol, VTabs, VTab, VIcon, VTooltip } from "vuetify/components";
+import { VCol, VTabs, VTab, VIcon } from "vuetify/components";
 import { getIpInfo } from "@/api/userInfo";
 import type { IpInfo } from "@/api/userInfo";
 
@@ -85,9 +85,7 @@ let welcomebar = reactive({
 
 const ipSnakbar = () => {
   getIpInfo().then((res: IpInfo) => {
-    console.log(res);
-    const { ip, country, region, city } = res;
-    console.log("你好，来自" + country + region + city + "的朋友！");
+    const { country, region, city } = res;
     setTimeout(() => {
       welcomebar.show = true;
       welcomebar.text = "你好，来自" + country + region + city + "的朋友！";
@@ -114,13 +112,9 @@ onMounted(() => {
       </template>
       <template v-slot:append>
         <v-tabs>
-          <v-tooltip bottom>
-            <template v-slot:activator>
-              <v-tab to="/"><v-icon size="x-large">mdi-home</v-icon></v-tab>
-            </template>
-            <span>xxx</span>
-          </v-tooltip>
-          <v-tab to="/about"><v-icon size="x-large">mdi-book</v-icon></v-tab>
+          <v-tab to="/"><v-icon size="x-large">mdi-home</v-icon></v-tab>
+          <v-tab to="/web"><v-icon size="x-large">mdi-folder</v-icon></v-tab>
+          <v-tab to="/about"><v-icon size="x-large">mdi-account</v-icon></v-tab>
         </v-tabs>
       </template>
     </v-app-bar>

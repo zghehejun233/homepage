@@ -1,25 +1,30 @@
 <script setup lang="ts">
 import { VContainer, VRow, VCard, VIcon, VBtn } from "vuetify/components";
-import { onMounted, reactive } from "vue";
+import { reactive } from "vue";
 
 const contacts = reactive({
   github: {
     name: "github",
     show: false,
     icon: "mdi-github",
-    url: "https://baidu.com",
-    content: "github.com/xxx",
+    url: "https://github.com/zghehejun233",
+    content: "zghehejun233",
   },
   email: {
     name: "email",
     show: false,
     icon: "mdi-email",
     url: "x",
-    content: "xxx",
+    content: "202100300224@mail.sdu.edu.cn",
+  },
+  bilibili: {
+    name: "bilibili",
+    show: false,
+    icon: "mdi-television-classic",
+    url: "https://space.bilibili.com/12473468",
+    content: "-呵呵君w-",
   },
 });
-
-let snackbar = reactive({ value: false });
 
 const colors = ["cyan", "pink", "purple", "indigo", "blue", "teal", "green"];
 
@@ -41,7 +46,6 @@ const info = reactive({
 const goUrl = (url: string) => {
   window.open(url, "_blank");
 };
-onMounted(() => {});
 </script>
 
 <template>
@@ -68,7 +72,7 @@ onMounted(() => {});
               color="primary"
               :icon="!contact.show"
               :rounded="contact.show ? false : true"
-              :size="contact.show ? 'large' : 'small'"
+              :size="contact.show ? 'medium' : 'small'"
               @click="contact.show = !contact.show"
               @click.ctrl="goUrl(contact.url)"
             >
@@ -76,26 +80,14 @@ onMounted(() => {});
               <Transition name="contact">
                 <div v-if="contact.show">{{ contact.content }}</div>
               </Transition>
-              <v-snackbar v-model="snackbar.value">
-                {{ contact.content }}
-
-                <template v-slot:actions>
-                  <v-btn
-                    color="pink"
-                    variant="text"
-                    @click="snackbar.value = false"
-                  >
-                    Close
-                  </v-btn>
-                </template>
-              </v-snackbar>
             </v-btn>
           </div>
         </div>
       </v-card-subtitle>
     </v-card>
   </v-container>
-  <v-container>
+  <div style="height: 800px"></div>
+  <v-container id="skills">
     <v-row justify="center">
       <div v-for="(skill, idx) in info.skills" :key="skill">
         <v-chip
@@ -108,6 +100,7 @@ onMounted(() => {});
       </div>
     </v-row>
   </v-container>
+  <div style="height: 400px"></div>
 </template>
 
 <style scoped>
