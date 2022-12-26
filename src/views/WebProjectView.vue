@@ -46,9 +46,9 @@ onMounted(() => {
 </script>
 <template>
   <v-container>
-    <v-row>
+    <v-row justify="center" align-content="center" align="center">
       <!-- 介绍项目 -->
-      <v-col cols="12" md="6">
+      <v-col cols="8">
         <v-card>
           <v-card-title>
             <div>
@@ -63,6 +63,18 @@ onMounted(() => {
                 >React</RouterLink
               >, 后端使用Spring Cloud Alibaba构建的学生管理系统
             </p>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="4">
+        <v-card>
+          <v-card-title>
+            <div>
+              <h1>运行状况</h1>
+            </div>
+          </v-card-title>
+          <v-card-text>
+            <p>{{ brief.detail }}</p>
           </v-card-text>
         </v-card>
       </v-col>
