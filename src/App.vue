@@ -110,6 +110,7 @@ onMounted(() => {
           <span class="ml-2">苏喂</span>
         </span>
       </template>
+      <!--  -->
       <template v-slot:append>
         <v-tabs>
           <v-tab to="/"><v-icon size="x-large">mdi-home</v-icon></v-tab>
