@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
-import { VDivider } from "vuetify/components";
+import { VDivider, VImg } from "vuetify/components";
 import { reactive, onMounted } from "vue";
 
 interface Brief {
@@ -98,7 +98,26 @@ onMounted(() => {
       <v-expand-transition>
         <v-card-text v-show="brief.show">
           <div v-for="item in brief.detail" :key="item">
-            <p>{{ item }}</p>
+            <v-container v-if="item.startsWith('http')">
+              <v-row align-content="center" justify="center">
+                <v-img
+                  lazy-src="https://picsum.photos/id/11/100/60"
+                  max-width="800"
+                  :src="item"
+                  aspect-ratio="1.5"
+                >
+                  <template v-slot:placeholder>
+                    <div class="d-flex align-center justify-center fill-height">
+                      <v-progress-circular
+                        indeterminate
+                        color="grey-lighten-4"
+                      ></v-progress-circular>
+                    </div>
+                  </template>
+                </v-img>
+              </v-row>
+            </v-container>
+            <p v-else>{{ item }}</p>
           </div>
         </v-card-text>
       </v-expand-transition>
