@@ -2,6 +2,16 @@
 import { RouterLink } from "vue-router";
 import { VDivider, VImg } from "vuetify/components";
 import { reactive, onMounted } from "vue";
+import CodeBlock from "@/components/CodeBlock.vue";
+const code = `
+import { createApp } from 'vue'
+import App from './App.vue'
+import router from './router'
+import store from './store'
+import './index.css'
+
+createApp(App).use(store).use(router).mount('#app')
+`;
 
 interface Brief {
   singleLineDescription?: string;
@@ -97,6 +107,8 @@ onMounted(() => {
       </v-card-actions>
       <v-expand-transition>
         <v-card-text v-show="brief.show">
+          <CodeBlock :code="code" language="javascript" :show-code="true" />
+
           <div v-for="item in brief.detail" :key="item">
             <v-container v-if="item.startsWith('http')">
               <v-row align-content="center" justify="center">
