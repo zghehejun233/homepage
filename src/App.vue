@@ -2,18 +2,19 @@
 import { RouterView } from "vue-router";
 import { onMounted, reactive } from "vue";
 import { VApp, VMain, VAppBar } from "vuetify/components";
-import { VCol, VTabs, VTab, VIcon } from "vuetify/components";
+import { VCol, VTabs, VTab, VIcon, VDivider } from "vuetify/components";
+import { useTheme } from "vuetify";
 import { getIpInfo } from "@/api/userInfo";
 import type { IpInfo } from "@/api/userInfo";
 
 // 背景滚动速度
-const parallelRaatio = 0.02;
+const PARALLEL_RATIO = 0.02;
 
 function parallelScroll() {
   document.addEventListener("scroll", function () {
     let scroll = window.scrollY;
     let bg = document.getElementsByTagName("canvas")[0] as HTMLCanvasElement;
-    bg.style.transform = "translateY(" + scroll * parallelRaatio + "px)";
+    bg.style.transform = "translateY(" + scroll * PARALLEL_RATIO + "px)";
   });
 }
 
@@ -93,10 +94,33 @@ const ipSnakbar = () => {
   });
 };
 
+const theme = useTheme();
+
+const _updateTheme = (event: MediaQueryListEvent) => {
+  event.matches
+    ? (theme.global.name.value = "dark")
+    : (theme.global.name.value = "light");
+};
+
+const toggleTheme = () => {
+  theme.global.name.value = theme.global.current.value.dark ? "light" : "dark";
+  // 手动更改主题后，移除监听
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .removeEventListener("change", _updateTheme);
+};
+
+const detectDarkMode = () => {
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", _updateTheme);
+};
+
 onMounted(() => {
   drawRibbon(document.getElementsByTagName("canvas")[0] as HTMLCanvasElement);
   parallelScroll();
   ipSnakbar();
+  detectDarkMode();
 });
 </script>
 
@@ -104,7 +128,7 @@ onMounted(() => {
   <canvas class="bg"></canvas>
   <v-app id="main">
     <v-app-bar :elevation="2" scroll-threshold="200" rounded>
-      <template v-slot:default>
+      <template v-slot:title>
         <span>
           <v-icon size="x-large">mdi-vuetify</v-icon>
           <span class="ml-2">苏喂</span>
@@ -117,6 +141,14 @@ onMounted(() => {
           <v-tab to="/web"><v-icon size="x-large">mdi-folder</v-icon></v-tab>
           <v-tab to="/about"><v-icon size="x-large">mdi-account</v-icon></v-tab>
         </v-tabs>
+        <v-divider
+          vertical
+          inset
+          style="margin-left: 0.5vh; margin-right: 0.5vh"
+        ></v-divider>
+        <v-btn @click="toggleTheme">
+          <v-icon size="large">mdi-brightness-6</v-icon>
+        </v-btn>
       </template>
     </v-app-bar>
     <v-main>

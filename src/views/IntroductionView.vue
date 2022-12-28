@@ -45,11 +45,15 @@ const buildQuote = () => {
       parentFontSize;
     resizeQuoteText(textWidth, textLength, res);
 
-    quote.from = `—《${res.from}》` + (res.who ? `，${res.who}` : "");
+    quote.from = `—《${res.from}》` + (res.who ? ` ${res.who}` : "");
     quote.uuid = res.uuid;
 
     // 调整文本动画
     let textAnimationDuration: number = (20 / textLength) * textAnimationRatio;
+    textAnimationDuration =
+      textAnimationDuration > 10 ? 10 : textAnimationDuration;
+    textAnimationDuration =
+      textAnimationDuration < 3 ? 3 : textAnimationDuration;
     textElement.style.animationDuration = `${textAnimationDuration}s`;
 
     // 监听窗口大小变化

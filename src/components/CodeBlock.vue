@@ -91,12 +91,10 @@ const handleCopyCode = (text: string, event: Event) => {
 
 <style scoped>
 .code-palce-container {
-  background-color: #f3f3f3;
   padding: 4px;
 }
 
 .code-box {
-  background-color: #fff;
   padding: 10px;
   height: fit-content;
 }
