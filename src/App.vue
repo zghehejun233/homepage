@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
-import { onMounted, reactive } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { VApp, VMain, VAppBar } from "vuetify/components";
 import { VCol, VTabs, VTab, VIcon, VDivider } from "vuetify/components";
 import { useTheme } from "vuetify";
@@ -9,6 +9,18 @@ import type { IpInfo } from "@/api/userInfo";
 
 // 背景滚动速度
 const PARALLEL_RATIO = 0.02;
+
+const folderItems = [
+  { name: "Web课设", to: "/web", icon: "mdi-television", description: "" },
+  {
+    name: "Untitled",
+    to: "/tablature",
+    icon: "mdi-guitar-pick-outline",
+    description: "",
+  },
+];
+
+const showFolder = ref(false);
 
 function parallelScroll() {
   document.addEventListener("scroll", function () {
@@ -137,16 +149,42 @@ onMounted(() => {
       <!--  -->
       <template v-slot:append>
         <v-tabs>
-          <v-tab to="/"><v-icon size="x-large">mdi-home</v-icon></v-tab>
-          <v-tab to="/web"><v-icon size="x-large">mdi-folder</v-icon></v-tab>
-          <v-tab to="/about"><v-icon size="x-large">mdi-account</v-icon></v-tab>
+          <v-tab to="/" icon><v-icon size="large">mdi-home</v-icon></v-tab>
+          <v-menu>
+            <template v-slot:activator="{ props }">
+              <v-btn
+                style="padding-top: 1.5vh"
+                size="large"
+                height="100%"
+                v-bind="props"
+              >
+                <v-icon size="x-large">mdi-folder</v-icon>
+                <v-icon end> mdi-menu-down </v-icon>
+              </v-btn>
+            </template>
+
+            <v-list>
+              <v-list-item v-for="item in folderItems" :key="item.name">
+                <template v-slot:prepend>
+                  <v-icon :icon="item.icon"></v-icon>
+                </template>
+                <RouterLink :to="item.to" class="link">
+                  {{ item.name }}
+                </RouterLink>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+
+          <v-tab to="/about" icon
+            ><v-icon size="large">mdi-account</v-icon></v-tab
+          >
         </v-tabs>
         <v-divider
           vertical
           inset
           style="margin-left: 0.5vh; margin-right: 0.5vh"
         ></v-divider>
-        <v-btn @click="toggleTheme">
+        <v-btn style="padding-top: 1vh" @click="toggleTheme">
           <v-icon size="large">mdi-brightness-6</v-icon>
         </v-btn>
       </template>
@@ -162,7 +200,8 @@ onMounted(() => {
       <v-col class="text-center" cols="12">
         <div class="footer">
           2021 - {{ new Date().getFullYear() }} | Powered by
-          <strong>Vuetify Vue Vite</strong><br />鲁ICP备2022030000号
+          <strong>Vuetify Vue Vite</strong><br />
+          <div class="icp">鲁ICP备2022030000号</div>
         </div>
       </v-col>
       <v-snackbar v-model="welcomebar.show" timeout="3000" color="success">
@@ -178,6 +217,10 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.link {
+  text-decoration: none;
+  color: inherit;
+}
 /* 下面我们会解释这些 class 是做什么的 */
 .fade-enter-active,
 .fade-leave-active {
@@ -206,5 +249,9 @@ onMounted(() => {
 
 .footer {
   padding: 30px 0;
+}
+
+.icp {
+  text-decoration: line-through;
 }
 </style>

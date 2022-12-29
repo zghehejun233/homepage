@@ -35,6 +35,11 @@ const router = createRouter({
       name: "web",
       component: () => import("../views/WebProjectView.vue"),
     },
+    {
+      path: "/tablature",
+      name: "tablature",
+      component: () => import("../views/TablatureView.vue"),
+    },
   ],
 });
 
