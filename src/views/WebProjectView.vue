@@ -1,39 +1,28 @@
 <script setup lang="ts">
-import { RouterLink } from "vue-router";
-import { VDivider, VImg } from "vuetify/components";
+import { VDivider } from "vuetify/components";
 import { reactive, onMounted } from "vue";
-import CodeBlock from "@/components/CodeBlock.vue";
-const code = `
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from './store'
-import './index.css'
+import WebIntroCard from "@/components/WebIntroCard.vue";
 
-createApp(App).use(store).use(router).mount('#app')
-`;
-
-interface Brief {
+interface Info {
   singleLineDescription?: string;
   detail?: string[];
   show: boolean;
 }
-const brief: Brief = reactive({
+
+const brief: Info = reactive({
   show: false,
 });
 
-const duty = reactive({
-  singleLineDescription: "emmm",
-  detail: [""],
-});
-const backend = reactive({
-  singleLineDescription: "emmm",
-  detail: "xxxx",
+const duty: Info = reactive({
+  show: false,
 });
 
-const deploy = reactive({
-  singleLineDescription: "emmm",
-  detail: "xxxx",
+const backend: Info = reactive({
+  show: false,
+});
+
+const deploy: Info = reactive({
+  show: false,
 });
 
 const loadFile = async () => {
@@ -42,12 +31,20 @@ const loadFile = async () => {
     .then((res) => {
       const _brief = res.brief;
       const _duty = res.duty;
+      const _backend = res.backend;
+      const _deploy = res.deploy;
 
       brief.singleLineDescription = _brief.un;
       brief.detail = _brief.detail;
 
       duty.singleLineDescription = _duty.un;
       duty.detail = _duty.detail;
+
+      backend.singleLineDescription = _backend.un;
+      backend.detail = _backend.detail;
+
+      deploy.singleLineDescription = _deploy.un;
+      deploy.detail = _deploy.detail;
     });
 };
 onMounted(() => {
@@ -58,7 +55,7 @@ onMounted(() => {
   <v-container>
     <v-row justify="center" align-content="center" align="center">
       <!-- 介绍项目 -->
-      <v-col cols="8">
+      <v-col cols="10">
         <v-card>
           <v-card-title>
             <div>
@@ -69,93 +66,18 @@ onMounted(() => {
           </v-card-title>
           <v-card-text>
             <p>
-              一个前端基于<RouterLink class="link" to="/about/#skills"
-                >React</RouterLink
-              >, 后端使用Spring Cloud Alibaba构建的学生管理系统
+              一个前端基于React, 后端使用Spring Cloud Alibaba构建的学生管理系统
             </p>
-          </v-card-text>
-        </v-card>
-      </v-col>
-      <v-col cols="4">
-        <v-card>
-          <v-card-title>
-            <div>
-              <h1>运行状况</h1>
-            </div>
-          </v-card-title>
-          <v-card-text>
-            <p>{{ brief.detail }}</p>
           </v-card-text>
         </v-card>
       </v-col>
     </v-row>
   </v-container>
-  <v-divider></v-divider>
-  <v-container>
-    <v-card>
-      <v-card-title>项目简介</v-card-title>
-      <v-card-subtitle>{{ brief.singleLineDescription }}</v-card-subtitle>
-      <v-card-actions>
-        <v-btn color="primary" variant="text"> MORE </v-btn>
-
-        <v-spacer></v-spacer>
-
-        <v-btn
-          :icon="brief.show ? 'mdi-chevron-up' : 'mdi-chevron-down'"
-          @click="brief.show = !brief.show"
-        ></v-btn>
-      </v-card-actions>
-      <v-expand-transition>
-        <v-card-text v-show="brief.show">
-          <CodeBlock :code="code" language="javascript" :show-code="true" />
-
-          <div v-for="item in brief.detail" :key="item">
-            <v-container v-if="item.startsWith('http')">
-              <v-row align-content="center" justify="center">
-                <v-img
-                  lazy-src="https://picsum.photos/id/11/100/60"
-                  max-width="800"
-                  :src="item"
-                  aspect-ratio="1.5"
-                >
-                  <template v-slot:placeholder>
-                    <div class="d-flex align-center justify-center fill-height">
-                      <v-progress-circular
-                        indeterminate
-                        color="grey-lighten-4"
-                      ></v-progress-circular>
-                    </div>
-                  </template>
-                </v-img>
-              </v-row>
-            </v-container>
-            <p v-else>{{ item }}</p>
-          </div>
-        </v-card-text>
-      </v-expand-transition>
-    </v-card>
-  </v-container>
-  <v-container>
-    <v-card>
-      <v-card-title>职责</v-card-title>
-      <v-card-subtitle>{{ brief.singleLineDescription }}</v-card-subtitle>
-      <v-card-text>{{ brief.detail }}</v-card-text>
-    </v-card>
-  </v-container>
-  <v-container>
-    <v-card>
-      <v-card-title>后端技术</v-card-title>
-      <v-card-subtitle>{{ backend.singleLineDescription }}</v-card-subtitle>
-      <v-card-text>{{ brief.detail }}</v-card-text>
-    </v-card>
-  </v-container>
-  <v-container>
-    <v-card>
-      <v-card-title>运行维护</v-card-title>
-      <v-card-subtitle>{{ deploy.singleLineDescription }}</v-card-subtitle>
-      <v-card-text>{{ brief.detail }}</v-card-text>
-    </v-card>
-  </v-container>
+  <v-divider inset></v-divider>
+  <web-intro-card :info="brief" title="简介"></web-intro-card>
+  <web-intro-card :info="duty" title="我的职责"></web-intro-card>
+  <WebIntroCard :info="backend" title="后端技术"></WebIntroCard>
+  <web-intro-card :info="deploy" title="运行维护"></web-intro-card>
 </template>
 <style scope>
 .fade-enter-active,

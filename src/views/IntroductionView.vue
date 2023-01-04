@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { VContainer, VCol, VRow } from "vuetify/components";
+import { VContainer, VCol, VRow, VImg } from "vuetify/components";
 import { onMounted, reactive } from "vue";
 
 import { getQuote } from "@/api/quote";
@@ -102,6 +102,17 @@ const printBanner = () => {
   );
 };
 
+const bannerInfo = reactive({
+  show: true,
+  text: "你好呀👋本站是一个引导页，你可以在这里看到一些有趣的东西，更多内容请访问我的博客",
+});
+
+const openBlog = () => {
+  console.log("打开博客");
+
+  window.open("https://surui-blog.vercel.app/", "_blank");
+};
+
 onMounted(() => {
   printBanner();
   buildBingImage();
@@ -110,6 +121,17 @@ onMounted(() => {
 </script>
 <template>
   <v-container class="introduction">
+    <v-banner
+      v-if="bannerInfo.show"
+      color="success"
+      icon="mdi-vuetify"
+      lines="one"
+      :text="bannerInfo.text"
+    >
+      <v-banner-actions>
+        <v-btn @click="bannerInfo.show = false">关闭</v-btn>
+      </v-banner-actions>
+    </v-banner>
     <v-row>
       <v-col cols="12"><div id="xxx"></div></v-col>
       <v-col cols="12">
@@ -127,16 +149,69 @@ onMounted(() => {
         </v-parallax>
       </v-col>
     </v-row>
-    <v-row align="center" align-content="center" justify="center">
-      <v-col cols="6">xxxx</v-col>
-      <v-col cols="6">yyyy</v-col>
-    </v-row>
-    <v-row>
-      <div style="height: 800px"></div>
-    </v-row>
+  </v-container>
+  <v-container>
+    <v-card>
+      <v-card-title>我的Github⬇️</v-card-title>
+      <v-card-subtitle>或许commit有些过于稀疏？</v-card-subtitle>
+      <v-card-text>
+        <v-container>
+          <v-row align-content="center" justify="center">
+            <v-col cols="10">
+              <v-img src="https://ghchart.rshah.org/409ba5/zghehejun233" />
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card-text>
+    </v-card>
+  </v-container>
+  <v-container>
+    <v-card>
+      <v-card-title>我的博客⬇️</v-card-title>
+      <v-card-subtitle>可以访问“友链”看看其他朋友哦</v-card-subtitle>
+      <v-card-text>
+        <iframe
+          src="https://surui-blog.vercel.app/"
+          frameborder="0"
+          width="100%"
+          height="1000px"
+        ></iframe>
+      </v-card-text>
+      <v-card-actions>
+        <v-row>
+          <v-spacer></v-spacer>
+          <v-btn
+            style="margin: 1vh 2vw"
+            prepend-icon="mdi-chevron-right"
+            @click="openBlog"
+            color="primary"
+          >
+            Detail
+          </v-btn>
+        </v-row>
+      </v-card-actions>
+    </v-card>
   </v-container>
 </template>
 <style scoped>
+.v-card {
+  margin-top: 20px;
+}
+
+.v-card-title {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.v-card-subtitle {
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.v-card-text {
+  font-size: 1rem;
+  font-weight: 400;
+}
 .quote {
   display: flex;
 
